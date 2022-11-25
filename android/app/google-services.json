@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "262893416863",
+    "project_id": "shoea-ecomapp",
+    "storage_bucket": "shoea-ecomapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262893416863:android:9245cf86d7ad9524b44daa",
+        "android_client_info": {
+          "package_name": "com.example.shoea_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "262893416863-okq5fiut9k2avvfc43uerg1e5vnh4sfg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWKey--TpCqOQnrEPR_G9heiVJyXHSWPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "262893416863-okq5fiut9k2avvfc43uerg1e5vnh4sfg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262893416863:android:41aecf38420a7a00b44daa",
+        "android_client_info": {
+          "package_name": "com.example.shoea_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "262893416863-okq5fiut9k2avvfc43uerg1e5vnh4sfg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWKey--TpCqOQnrEPR_G9heiVJyXHSWPA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "262893416863-okq5fiut9k2avvfc43uerg1e5vnh4sfg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
