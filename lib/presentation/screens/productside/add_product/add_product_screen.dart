@@ -242,7 +242,8 @@ class AddProducts extends StatelessWidget {
                       description_controller: description_controller.text,
                       price_controller: price_controller.text,
                       quantity_controller: quantity_controller.text,
-                      Size: productsize.toString()));
+                      Size: productsize.toString(),
+                      docName: name_controller.text));
                   productAddedAlert(context, name_controller.text);
 
                   Navigator.of(context).pop();

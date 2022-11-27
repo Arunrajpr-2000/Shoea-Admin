@@ -5,6 +5,7 @@ import 'package:shoea_admin/model/product_model.dart';
 Future addProduct({
   required String size,
   required String name,
+  required String docName,
   required String description,
   String price = '1',
   String quantity = '1',
@@ -18,6 +19,7 @@ Future addProduct({
   //     .doc();
   log('adding product to $name');
   final Product product = Product(
+    docName: docName,
     size: size,
     name: name,
     description: description,
@@ -27,11 +29,15 @@ Future addProduct({
   );
   final json = product.toJson();
   log('befre adding');
+  log('Docname ${docName}');
+  log('Prod name ${product.name}');
+  log('product ${product.docName}');
+
   final allProduc = FirebaseFirestore.instance
       .collection('categories')
-      .doc('all categories')
+      .doc(categoryName)
       .collection(categoryName)
-      .doc(product.name);
+      .doc(product.docName);
   // await docProduct.set(json);
   await allProduc.set(json);
 

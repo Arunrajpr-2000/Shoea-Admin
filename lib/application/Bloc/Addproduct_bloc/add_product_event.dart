@@ -18,9 +18,11 @@ class SaveToDB extends AddProductEvent {
     required this.description_controller,
     required this.price_controller,
     required this.quantity_controller,
+    required this.docName,
   });
   final String categoryName;
   final String Size;
+  final String docName;
   final String name_controller;
   final String description_controller;
 

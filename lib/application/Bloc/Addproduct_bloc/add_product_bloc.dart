@@ -52,6 +52,7 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
             event.quantity_controller.isEmpty ? '0' : event.quantity_controller,
         images: state.images,
         size: event.Size,
+        docName: event.docName,
       );
       emit(state);
     });

@@ -11,7 +11,7 @@ import 'package:shoea_admin/presentation/screens/productside/product_details/pro
 class InSideCategory extends StatelessWidget {
   InSideCategory({required this.brandName, super.key});
 
-  String? brandName;
+  String brandName;
 
   final List<String>? Cartimage = [
     'https://rukminim1.flixcart.com/image/832/832/l58iaa80/shoe/9/y/q/-original-imagfyaseenuzn6d.jpeg?q=70',
@@ -48,9 +48,9 @@ class InSideCategory extends StatelessWidget {
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('category')
+              .collection('categories')
               .doc(brandName)
-              .collection('categoryproduct')
+              .collection(brandName)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -69,11 +69,13 @@ class InSideCategory extends StatelessWidget {
                     child: ListTile(
                       onTap: () => Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ProductView(
-                          productname: documentSnapshot['name'],
-                          productdescription: documentSnapshot['description'],
-                          productprice: documentSnapshot['price'],
-                          productquantiy: documentSnapshot['quantity'],
-                          productsize: documentSnapshot['size'],
+                          productname: documentSnapshot['name'].toString(),
+                          productdescription:
+                              documentSnapshot['description'].toString(),
+                          productprice: documentSnapshot['price'].toString(),
+                          productquantiy:
+                              documentSnapshot['quantity'].toString(),
+                          productsize: documentSnapshot['size'].toString(),
                           productimage: documentSnapshot['image'],
                         ),
                       )),
@@ -88,7 +90,7 @@ class InSideCategory extends StatelessWidget {
                         child: documentSnapshot['image'] == null
                             ? Image.network('${Cartimage![0]}')
                             : Image.network(
-                                documentSnapshot['image'],
+                                documentSnapshot['image'][0],
                                 fit: BoxFit.cover,
                               ),
                       ),
@@ -97,7 +99,7 @@ class InSideCategory extends StatelessWidget {
                         style: TextStyle(color: Colors.black),
                       ),
                       subtitle: Text(
-                        documentSnapshot['price'],
+                        documentSnapshot['price'].toString(),
                         style: TextStyle(color: Colors.black),
                       ),
                       trailing: Row(

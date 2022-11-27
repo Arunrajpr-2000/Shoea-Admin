@@ -15,7 +15,7 @@ class CategoryList extends StatelessWidget {
   final namecontroller = TextEditingController();
   final nameEDitcontroller = TextEditingController();
 
-  String? categoryName;
+  String categoryName = 'dd';
   String? categoryProduct;
 
   @override
@@ -43,23 +43,24 @@ class CategoryList extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: StreamBuilder<List<Product>>(
-            stream: callCollection(categoryName!),
+        child: StreamBuilder<QuerySnapshot>(
+            stream:
+                FirebaseFirestore.instance.collection('categories').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
                   shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    // QueryDocumentSnapshot documentSnapshot =
-                    //     snapshot.data!.docs[index];
+                    QueryDocumentSnapshot documentSnapshot =
+                        snapshot.data!.docs[index];
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListTile(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => InSideCategory(
-                              brandName: categoryName,
+                              brandName: documentSnapshot['name'],
                             ),
                           ));
                         },
@@ -74,7 +75,7 @@ class CategoryList extends StatelessWidget {
                                   DocumentReference documentReference =
                                       FirebaseFirestore.instance
                                           .collection("category")
-                                          .doc(categoryName);
+                                          .doc(documentSnapshot['name']);
                                   documentReference.delete().whenComplete(
                                       () => log('$categoryName Deleted'));
                                 },
@@ -85,7 +86,8 @@ class CategoryList extends StatelessWidget {
                           ],
                         ),
                         title: Text(
-                          categoryName.toString(),
+                          documentSnapshot['name'],
+                          // categoryName,
                           style: const TextStyle(
                               fontSize: 20,
                               color: Color.fromARGB(255, 21, 20, 20)),
@@ -95,7 +97,8 @@ class CategoryList extends StatelessWidget {
                   },
                 );
               } else {
-                return const Center(
+                return Align(
+                  alignment: FractionalOffset.bottomCenter,
                   child: CircularProgressIndicator(
                     color: Colors.red,
                   ),
@@ -158,25 +161,50 @@ class CategoryList extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               onPressed: () {
-                                CollectionReference collectionReference =
+                                DocumentReference documentReference =
                                     FirebaseFirestore.instance
                                         .collection("categories")
-                                        .doc('all categories')
-                                        .collection(categoryName!);
+                                        .doc(categoryName);
 
                                 Map<String, dynamic> category = {
                                   "name": categoryName,
                                 };
 
-                                collectionReference
-                                    .add(category)
+                                documentReference
+                                    .set(category)
                                     .whenComplete(() {
                                   log('$categoryName Created');
                                   //----------> New collection created--------->
                                   // FirebaseFirestore.instance
                                   //     .collection('categories')
-                                  //     .doc('all categories')
-                                  //     .collection(categoryName!)
+                                  //     .doc(categoryName)
+                                  //     .collection(categoryName)
+                                  //     .doc()
+                                  //     .set({});
+                                  //     .then((_) {
+                                  //   print("collection created");
+                                  // });
+                                });
+
+                                CollectionReference collectionReference =
+                                    FirebaseFirestore.instance
+                                        .collection("categories")
+                                        .doc(categoryName)
+                                        .collection(categoryName);
+
+                                Map<String, dynamic> categoryfield = {
+                                  "name": categoryName,
+                                };
+
+                                collectionReference
+                                    .add(categoryfield)
+                                    .whenComplete(() {
+                                  log('$categoryName Created');
+                                  //----------> New collection created--------->
+                                  // FirebaseFirestore.instance
+                                  //     .collection('categories')
+                                  //     .doc(categoryName)
+                                  //     .collection(categoryName)
                                   //     .doc()
                                   //     .set({});
                                   //     .then((_) {
@@ -214,12 +242,19 @@ class CategoryList extends StatelessWidget {
   }
 
   callCollection(String name) {
-    return FirebaseFirestore.instance
+    final snap = FirebaseFirestore.instance
         .collection('categories')
-        .doc('all categories')
-        .collection(name)
+        // .doc(name)
+        // .collection(name)
         .snapshots()
         .map((snapshot) =>
             snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList());
+    log(snap.toString());
+    return snap;
+  }
+
+  callCollectison() async {
+    final reff = FirebaseFirestore.instance.collection('categories').doc();
+    final names = await reff.get();
   }
 }

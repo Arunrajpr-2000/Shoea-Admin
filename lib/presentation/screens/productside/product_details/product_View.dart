@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shoea_admin/core/constants.dart';
 
@@ -18,7 +19,7 @@ class ProductView extends StatelessWidget {
 
   final String? productname;
   final String? productprice;
-  final String? productimage;
+  final List? productimage;
 
   final String? productdescription;
   final String? productsize;
