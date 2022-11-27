@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,7 @@ class InSideCategory extends StatelessWidget {
                           productprice: documentSnapshot['price'],
                           productquantiy: documentSnapshot['quantity'],
                           productsize: documentSnapshot['size'],
+                          productimage: documentSnapshot['image'],
                         ),
                       )),
                       tileColor: Colors.white,
@@ -83,7 +85,12 @@ class InSideCategory extends StatelessWidget {
 
                         // radius: 40,
                         // backgroundImage: NetworkImage(''),
-                        child: Image.network('${Cartimage![0]}'),
+                        child: documentSnapshot['image'] == null
+                            ? Image.network('${Cartimage![0]}')
+                            : Image.network(
+                                documentSnapshot['image'],
+                                fit: BoxFit.cover,
+                              ),
                       ),
                       title: Text(
                         documentSnapshot['name'],

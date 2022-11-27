@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shoea_admin/core/constants.dart';
 
 class PageViewWidget extends StatelessWidget {
-  const PageViewWidget({
-    Key? key,
-  }) : super(key: key);
+  const PageViewWidget({Key? key, required this.productimage})
+      : super(key: key);
+
+  final String? productimage;
 
   @override
   Widget build(BuildContext context) {

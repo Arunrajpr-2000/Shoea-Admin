@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shoea_admin/core/constants.dart';
+import 'package:shoea_admin/model/product_model.dart';
+import 'package:shoea_admin/presentation/screens/productside/add_product/add_product_screen.dart';
 import 'package:shoea_admin/presentation/screens/productside/categories/insidecategory.dart';
-
-import 'package:firebase_core/firebase_core.dart';
 
 class CategoryList extends StatelessWidget {
   String? value;
@@ -14,7 +14,6 @@ class CategoryList extends StatelessWidget {
 
   final namecontroller = TextEditingController();
   final nameEDitcontroller = TextEditingController();
-  String? Name;
 
   String? categoryName;
   String? categoryProduct;
@@ -22,83 +21,89 @@ class CategoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: const Text('Categories'),
-          centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  AddNewCategory(context);
-                },
-                icon: const Icon(Icons.add))
-          ],
-        ),
-        body: SafeArea(
-            child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('category')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        QueryDocumentSnapshot documentSnapshot =
-                            snapshot.data!.docs[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => InSideCategory(
-                                  brandName: documentSnapshot['name'],
-                                ),
-                              ));
-                            },
-                            tileColor: Whitecolor,
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.edit)),
-                                IconButton(
-                                    onPressed: () {
-                                      DocumentReference documentReference =
-                                          FirebaseFirestore.instance
-                                              .collection("category")
-                                              .doc(documentSnapshot['name']);
-                                      documentReference.delete().whenComplete(
-                                          () => log('$categoryName Deleted'));
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    )),
-                              ],
+        title: const Text('Categories'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => AddProducts(brandName: '')),
+                );
+              },
+              icon: const Icon(Icons.add_a_photo)),
+          IconButton(
+              onPressed: () {
+                AddNewCategory(context);
+              },
+              icon: const Icon(Icons.add))
+        ],
+      ),
+      body: SafeArea(
+        child: StreamBuilder<List<Product>>(
+            stream: callCollection(categoryName!),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    // QueryDocumentSnapshot documentSnapshot =
+                    //     snapshot.data!.docs[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => InSideCategory(
+                              brandName: categoryName,
                             ),
-                            title: Text(
-                              documentSnapshot['name'],
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Color.fromARGB(255, 21, 20, 20)),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return Align(
-                      alignment: FractionalOffset.bottomCenter,
-                      child: CircularProgressIndicator(
-                        color: Colors.red,
+                          ));
+                        },
+                        tileColor: Whitecolor,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                                onPressed: () {}, icon: const Icon(Icons.edit)),
+                            IconButton(
+                                onPressed: () {
+                                  DocumentReference documentReference =
+                                      FirebaseFirestore.instance
+                                          .collection("category")
+                                          .doc(categoryName);
+                                  documentReference.delete().whenComplete(
+                                      () => log('$categoryName Deleted'));
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                )),
+                          ],
+                        ),
+                        title: Text(
+                          categoryName.toString(),
+                          style: const TextStyle(
+                              fontSize: 20,
+                              color: Color.fromARGB(255, 21, 20, 20)),
+                        ),
                       ),
                     );
-                  }
-                })));
+                  },
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.red,
+                  ),
+                );
+              }
+            }),
+      ),
+    );
   }
 
   Future<dynamic> AddNewCategory(BuildContext context) {
@@ -153,26 +158,27 @@ class CategoryList extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10))),
                               onPressed: () {
-                                DocumentReference documentReference =
+                                CollectionReference collectionReference =
                                     FirebaseFirestore.instance
-                                        .collection("category")
-                                        .doc(categoryName);
+                                        .collection("categories")
+                                        .doc('all categories')
+                                        .collection(categoryName!);
 
                                 Map<String, dynamic> category = {
                                   "name": categoryName,
                                 };
 
-                                documentReference
-                                    .set(category)
+                                collectionReference
+                                    .add(category)
                                     .whenComplete(() {
                                   log('$categoryName Created');
                                   //----------> New collection created--------->
-                                  FirebaseFirestore.instance
-                                      .collection('category')
-                                      .doc(categoryName)
-                                      .collection('categoryproduct')
-                                      .doc()
-                                      .set({});
+                                  // FirebaseFirestore.instance
+                                  //     .collection('categories')
+                                  //     .doc('all categories')
+                                  //     .collection(categoryName!)
+                                  //     .doc()
+                                  //     .set({});
                                   //     .then((_) {
                                   //   print("collection created");
                                   // });
@@ -205,5 +211,15 @@ class CategoryList extends StatelessWidget {
             ),
           );
         });
+  }
+
+  callCollection(String name) {
+    return FirebaseFirestore.instance
+        .collection('categories')
+        .doc('all categories')
+        .collection(name)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList());
   }
 }

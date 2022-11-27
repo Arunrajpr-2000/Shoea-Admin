@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/text_fields_widget.dart';
 
 import '../../../../core/constants.dart';
-import '../add_product/widgets/add_varients_widget.dart';
+import '../add_product/widgets/add_image_widget.dart';
 
 class editProduct extends StatelessWidget {
   editProduct({super.key});
@@ -137,7 +137,7 @@ class editProduct extends StatelessWidget {
           ),
 
           // height_20,
-          AddVarientsWidget(),
+          // AddImagesWidget(),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -2,28 +2,30 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoea_admin/core/constants.dart';
+import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/add_images_widget.dart';
 
-import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/text_fields_widget.dart';
-import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/add_varients_widget.dart';
+import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
+import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
 
 class AddProducts extends StatelessWidget {
   String? productname,
       productprice,
       productquantity,
       productdescription,
-      productsize;
+      productsize,
+      productimage;
 
   AddProducts({super.key, required this.brandName});
   final String? brandName;
   final name_controller = TextEditingController();
-  String? catogory;
+  // String? Size;
   final price_controller = TextEditingController();
   final description_controller = TextEditingController();
-  final altPrice_controller = TextEditingController();
-  final spec_controller = TextEditingController();
+
   final quantity_controller = TextEditingController();
-  final rating_controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width * 0.95;
@@ -167,66 +169,88 @@ class AddProducts extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
-            child: DropdownButton<String>(
-              focusColor: Colors.red,
-              iconEnabledColor: Colors.red,
-              dropdownColor: Whitecolor,
-              items: <String>[
-                '38',
-                '40',
-                '42',
-              ].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(
-                    value,
+            child: BlocBuilder<AddProductBloc, AddProductState>(
+              builder: (context, state) {
+                return DropdownButton<String>(
+                  focusColor: Colors.red,
+                  iconEnabledColor: Colors.red,
+                  dropdownColor: Whitecolor,
+                  items: <String>[
+                    '38',
+                    '40',
+                    '42',
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    productsize = value;
+
+                    // BlocProvider.of<AddProductBloc>(context)
+                    //     .add(Sizes(Size: Size ?? 'size'));
+                  },
+                  hint: const Text(
+                    'Size',
+                    style: TextStyle(color: Colors.white),
                   ),
                 );
-              }).toList(),
-              onChanged: (value) {
-                productsize = value;
               },
-              hint: const Text(
-                'Size',
-                style: TextStyle(color: Colors.white),
-              ),
             ),
           ),
           const SizedBox(
             height: 20,
           ),
 
-          //AddVarientsWidget(),
+          //AddImagesWidget(),
+
+          k20Height,
+
+          AddImageWidget(),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                 onPressed: () {
-                  DocumentReference documentReference = FirebaseFirestore
-                      .instance
-                      .collection("category")
-                      .doc(brandName)
-                      .collection('categoryproduct')
-                      .doc(productname);
+                  // DocumentReference documentReference = FirebaseFirestore
+                  //     .instance
+                  //     .collection("category")
+                  //     .doc(brandName)
+                  //     .collection('categoryproduct')
+                  //     .doc(productname);
 
                   //var productsize;
-                  Map<String, dynamic> category = {
-                    "name": productname,
-                    'price': productprice,
-                    'quantity': productquantity,
-                    'description': productdescription,
-                    'size': productsize,
-                  };
+                  // Map<String, dynamic> category = {
+                  //   "name": productname,
+                  //   'price': productprice,
+                  //   'quantity': productquantity,
+                  //   'description': productdescription,
+                  //   'size': productsize,
+                  //   'image': productimage
+                  // };
 
-                  documentReference
-                      .set(category)
-                      .whenComplete(() => log('$productname Created'));
+                  // documentReference
+                  //     .set(category)
+                  //     .whenComplete(() => log('$productname Created'));
+                  BlocProvider.of<AddProductBloc>(context).add(SaveToDB(
+                      categoryName: brandName.toString(),
+                      name_controller: name_controller.text,
+                      description_controller: description_controller.text,
+                      price_controller: price_controller.text,
+                      quantity_controller: quantity_controller.text,
+                      Size: productsize.toString()));
+                  productAddedAlert(context, name_controller.text);
 
                   Navigator.of(context).pop();
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
+                  primary: Colors.red,
+
                   textStyle: const TextStyle(fontSize: 20),
                   //backgroundColor: Colors.green
                 ),

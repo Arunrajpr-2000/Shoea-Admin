@@ -12,11 +12,13 @@ class ProductView extends StatelessWidget {
       required this.productprice,
       required this.productdescription,
       required this.productquantiy,
-      required this.productsize})
+      required this.productsize,
+      required this.productimage})
       : super(key: key);
 
   final String? productname;
   final String? productprice;
+  final String? productimage;
 
   final String? productdescription;
   final String? productsize;
@@ -46,7 +48,7 @@ class ProductView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const PageViewWidget(),
+            PageViewWidget(productimage: productimage),
             k20Height,
             ProductNamePrice(
                 productname: productname, productprice: productprice),
