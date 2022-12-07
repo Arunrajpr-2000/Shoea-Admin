@@ -1,9 +1,6 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import 'package:shoea_admin/presentation/screens/productside/add_product/add_product_screen.dart';
 import 'package:shoea_admin/presentation/screens/productside/edit_product/edit_product.dart';
 import 'package:shoea_admin/presentation/screens/productside/product_details/product_View.dart';
@@ -36,7 +33,7 @@ class InSideCategory extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                 backgroundColor: Colors.white.withOpacity(.1),
-                child: Icon(
+                child: const Icon(
                   Icons.add,
                   size: 40,
                   color: Colors.white,
@@ -63,6 +60,19 @@ class InSideCategory extends StatelessWidget {
                 itemBuilder: (context, index) {
                   QueryDocumentSnapshot documentSnapshot =
                       snapshot.data!.docs[index];
+                  String id = snapshot.data!.docs[index].id;
+                  log("ID $id");
+                  if (id != documentSnapshot['name']) {
+                    DocumentReference documentReference = FirebaseFirestore
+                        .instance
+                        .collection("categories")
+                        .doc(brandName)
+                        .collection(brandName)
+                        .doc(id);
+                    documentReference.delete().whenComplete(
+                        () => log("${documentSnapshot['name']} Deleted"));
+                  }
+                  // if (id == documentSnapshot['name']) {
                   return Padding(
                     padding:
                         const EdgeInsets.only(left: 10, right: 10, top: 20),
@@ -88,7 +98,7 @@ class InSideCategory extends StatelessWidget {
                         // radius: 40,
                         // backgroundImage: NetworkImage(''),
                         child: documentSnapshot['image'] == null
-                            ? Image.network('${Cartimage![0]}')
+                            ? Image.network(Cartimage![0])
                             : Image.network(
                                 documentSnapshot['image'][0],
                                 fit: BoxFit.cover,
@@ -96,20 +106,40 @@ class InSideCategory extends StatelessWidget {
                       ),
                       title: Text(
                         documentSnapshot['name'],
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                       subtitle: Text(
                         documentSnapshot['price'].toString(),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                              onPressed: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => editProduct())),
-                              icon: Icon(
+                              onPressed: () =>
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => EditProducts(
+                                            brandname: documentSnapshot['name']
+                                                .toString(),
+                                            productname:
+                                                documentSnapshot['name']
+                                                    .toString(),
+                                            productdescription:
+                                                documentSnapshot['description'],
+                                            productprice:
+                                                documentSnapshot['price']
+                                                    .toString(),
+                                            productquantity:
+                                                documentSnapshot['quantity']
+                                                    .toString(),
+                                            productsize:
+                                                documentSnapshot['size']
+                                                    .toString(),
+                                            productindeximage:
+                                                documentSnapshot['image']
+                                                    .toList(),
+                                          ))),
+                              icon: const Icon(
                                 Icons.edit,
                                 color: Colors.black,
                               )),
@@ -117,14 +147,14 @@ class InSideCategory extends StatelessWidget {
                               onPressed: () {
                                 DocumentReference documentReference =
                                     FirebaseFirestore.instance
-                                        .collection("category")
+                                        .collection("categories")
                                         .doc(brandName)
-                                        .collection('categoryproduct')
+                                        .collection(brandName)
                                         .doc(documentSnapshot['name']);
                                 documentReference.delete().whenComplete(() =>
-                                    log('${documentSnapshot['name']} Deleted'));
+                                    log("${documentSnapshot['name']} Deleted"));
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.delete,
                                 color: Colors.black,
                               ))
@@ -132,10 +162,13 @@ class InSideCategory extends StatelessWidget {
                       ),
                     ),
                   );
+                  // } else {
+                  //   return Text('');
+                  // }
                 },
               );
             } else {
-              return Align(
+              return const Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: CircularProgressIndicator(
                   color: Colors.red,

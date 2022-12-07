@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shoea_admin/presentation/screens/Orders/orders.dart';
-import 'package:shoea_admin/presentation/screens/productside/add_product/add_product_screen.dart';
 import 'package:shoea_admin/presentation/screens/productside/categories/categorylist.dart';
 import 'package:shoea_admin/presentation/screens/user%20Side/user.dart';
 
@@ -15,16 +14,6 @@ class HomeScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: Text('Shoea Admin'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => AddProducts(brandName: '')),
-                  );
-                },
-                icon: const Icon(Icons.add_a_photo)),
-          ],
           centerTitle: true,
         ),
         body: SafeArea(

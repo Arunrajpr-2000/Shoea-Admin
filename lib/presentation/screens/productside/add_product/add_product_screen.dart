@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoea_admin/core/constants.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/add_images_widget.dart';
+import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/textfield_widget.dart';
 
 import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
 import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
@@ -19,12 +20,12 @@ class AddProducts extends StatelessWidget {
 
   AddProducts({super.key, required this.brandName});
   final String? brandName;
-  final name_controller = TextEditingController();
+  TextEditingController name_controller = TextEditingController();
   // String? Size;
-  final price_controller = TextEditingController();
-  final description_controller = TextEditingController();
+  TextEditingController price_controller = TextEditingController();
+  TextEditingController description_controller = TextEditingController();
 
-  final quantity_controller = TextEditingController();
+  TextEditingController quantity_controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,128 +46,22 @@ class AddProducts extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
-          TextFormField(
-            controller: name_controller,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-            decoration: const InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 1.0),
-                ),
-                label: Text(
-                  'Name Of the Product',
-                  style: TextStyle(color: Colors.white70),
-                ),
-                // hintText: 'Name Of the Product',
-                hintStyle: TextStyle(color: Colors.white70)),
-            onChanged: (String name) {
-              productname = name;
-            },
-          ),
-
-          // textfield(
-          //     hint: 'Name of the Product',
-          //     fieldWidth: MediaQuery.of(context).size.width * 0.9,
-          //     controller: name_controller),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 150,
-                child: TextFormField(
-                  controller: price_controller,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                  decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 1.0),
-                      ),
-                      label: Text(
-                        'Price',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      // hintText: 'Name Of the Product',
-                      hintStyle: TextStyle(color: Colors.white70)),
-                  onChanged: (String name) {
-                    productprice = name;
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 150,
-                child: TextFormField(
-                  controller: quantity_controller,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                  decoration: const InputDecoration(
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 1.0),
-                      ),
-                      label: Text(
-                        'Quantity',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      // hintText: 'Name Of the Product',
-                      hintStyle: TextStyle(color: Colors.white70)),
-                  onChanged: (String name) {
-                    productquantity = name;
-                  },
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
+          TextfieldWidget(
+              controller: name_controller,
+              productField: productname,
+              labelName: 'Name of the Product'),
+          k20Height,
+          priceQuantityTextfield(),
+          k20Height,
           SizedBox(
             width: 200,
-            height: 100,
-            child: TextFormField(
-              controller: description_controller,
-              maxLines: 5,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-              decoration: const InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 1.0),
-                  ),
-                  label: Text(
-                    'Description',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                  // hintText: 'Name Of the Product',
-                  hintStyle: TextStyle(color: Colors.white70)),
-              onChanged: (String name) {
-                productdescription = name;
-              },
-            ),
+            height: 80,
+            child: TextfieldWidget(
+                controller: description_controller,
+                productField: productdescription,
+                labelName: 'Description'),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-
+          // k20Height,
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: BlocBuilder<AddProductBloc, AddProductState>(
@@ -189,9 +84,6 @@ class AddProducts extends StatelessWidget {
                   }).toList(),
                   onChanged: (value) {
                     productsize = value;
-
-                    // BlocProvider.of<AddProductBloc>(context)
-                    //     .add(Sizes(Size: Size ?? 'size'));
                   },
                   hint: const Text(
                     'Size',
@@ -201,16 +93,8 @@ class AddProducts extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(
-            height: 20,
-          ),
-
-          //AddImagesWidget(),
-
-          k20Height,
-
+          k30Height,
           AddImageWidget(),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -244,7 +128,6 @@ class AddProducts extends StatelessWidget {
                       quantity_controller: quantity_controller.text,
                       Size: productsize.toString(),
                       docName: name_controller.text));
-                  productAddedAlert(context, name_controller.text);
 
                   Navigator.of(context).pop();
                 },
@@ -267,31 +150,28 @@ class AddProducts extends StatelessWidget {
     );
   }
 
-  productAddedAlert(BuildContext context, String name) {
-    // set up the button
-    Widget okButton = TextButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.pop(context);
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      backgroundColor: Colors.white,
-      content: Text("$name added to database."),
-      actions: [
-        okButton,
+  Row priceQuantityTextfield() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          width: 150,
+          child: TextfieldWidget(
+              controller: price_controller,
+              productField: productprice,
+              keyboardType: TextInputType.number,
+              labelName: 'Price'),
+        ),
+        SizedBox(
+          width: 150,
+          child: TextfieldWidget(
+              controller: quantity_controller,
+              productField: productquantity,
+              keyboardType: TextInputType.number,
+              labelName: 'Qunatity'),
+        ),
       ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
     );
   }
 }

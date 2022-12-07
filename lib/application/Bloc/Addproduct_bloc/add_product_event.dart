@@ -29,8 +29,3 @@ class SaveToDB extends AddProductEvent {
   final String price_controller;
   final String quantity_controller;
 }
-
-// class Sizes extends AddProductEvent {
-//   Sizes({required this.Size});
-//   final String Size;
-// }

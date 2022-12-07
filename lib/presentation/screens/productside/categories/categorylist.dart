@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shoea_admin/core/constants.dart';
-import 'package:shoea_admin/model/product_model.dart';
-import 'package:shoea_admin/presentation/screens/productside/add_product/add_product_screen.dart';
 import 'package:shoea_admin/presentation/screens/productside/categories/insidecategory.dart';
+import 'package:shoea_admin/presentation/screens/productside/categories/widgets/add_new_category.dart';
+import 'package:shoea_admin/presentation/screens/productside/categories/widgets/category_listing_stream.dart';
 
 class CategoryList extends StatelessWidget {
   String? value;
@@ -15,7 +15,7 @@ class CategoryList extends StatelessWidget {
   final namecontroller = TextEditingController();
   final nameEDitcontroller = TextEditingController();
 
-  String categoryName = 'dd';
+  String? categoryName;
   String? categoryProduct;
 
   @override
@@ -29,232 +29,14 @@ class CategoryList extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => AddProducts(brandName: '')),
-                );
-              },
-              icon: const Icon(Icons.add_a_photo)),
-          IconButton(
-              onPressed: () {
-                AddNewCategory(context);
+                AddNewCategory(context, categoryName, namecontroller);
               },
               icon: const Icon(Icons.add))
         ],
       ),
       body: SafeArea(
-        child: StreamBuilder<QuerySnapshot>(
-            stream:
-                FirebaseFirestore.instance.collection('categories').snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    QueryDocumentSnapshot documentSnapshot =
-                        snapshot.data!.docs[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => InSideCategory(
-                              brandName: documentSnapshot['name'],
-                            ),
-                          ));
-                        },
-                        tileColor: Whitecolor,
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                                onPressed: () {}, icon: const Icon(Icons.edit)),
-                            IconButton(
-                                onPressed: () {
-                                  DocumentReference documentReference =
-                                      FirebaseFirestore.instance
-                                          .collection("category")
-                                          .doc(documentSnapshot['name']);
-                                  documentReference.delete().whenComplete(
-                                      () => log('$categoryName Deleted'));
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                )),
-                          ],
-                        ),
-                        title: Text(
-                          documentSnapshot['name'],
-                          // categoryName,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Color.fromARGB(255, 21, 20, 20)),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              } else {
-                return Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: CircularProgressIndicator(
-                    color: Colors.red,
-                  ),
-                );
-              }
-            }),
+        child: CategoryListStream(categoryName: categoryName),
       ),
     );
-  }
-
-  Future<dynamic> AddNewCategory(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (ctx) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            backgroundColor: Whitecolor,
-            child: Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: SizedBox(
-                width: 300,
-                height: 150,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: namecontroller,
-                      style: const TextStyle(
-                        color: Color(0xff2b2b29),
-                      ),
-                      decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Blackcolor, width: 2),
-                        ),
-                        hintStyle: TextStyle(color: Colors.grey[500]),
-                        hintText: 'Add New Category',
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xff2b2b29),
-                            width: 2.0,
-                          ),
-                        ),
-                      ),
-                      onChanged: (String name) {
-                        categoryName = name;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffdd0021),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10))),
-                              onPressed: () {
-                                DocumentReference documentReference =
-                                    FirebaseFirestore.instance
-                                        .collection("categories")
-                                        .doc(categoryName);
-
-                                Map<String, dynamic> category = {
-                                  "name": categoryName,
-                                };
-
-                                documentReference
-                                    .set(category)
-                                    .whenComplete(() {
-                                  log('$categoryName Created');
-                                  //----------> New collection created--------->
-                                  // FirebaseFirestore.instance
-                                  //     .collection('categories')
-                                  //     .doc(categoryName)
-                                  //     .collection(categoryName)
-                                  //     .doc()
-                                  //     .set({});
-                                  //     .then((_) {
-                                  //   print("collection created");
-                                  // });
-                                });
-
-                                CollectionReference collectionReference =
-                                    FirebaseFirestore.instance
-                                        .collection("categories")
-                                        .doc(categoryName)
-                                        .collection(categoryName);
-
-                                Map<String, dynamic> categoryfield = {
-                                  "name": categoryName,
-                                };
-
-                                collectionReference
-                                    .add(categoryfield)
-                                    .whenComplete(() {
-                                  log('$categoryName Created');
-                                  //----------> New collection created--------->
-                                  // FirebaseFirestore.instance
-                                  //     .collection('categories')
-                                  //     .doc(categoryName)
-                                  //     .collection(categoryName)
-                                  //     .doc()
-                                  //     .set({});
-                                  //     .then((_) {
-                                  //   print("collection created");
-                                  // });
-                                });
-
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                'Create',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                          ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffdd0021),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10))),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'Cancel',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
-
-  callCollection(String name) {
-    final snap = FirebaseFirestore.instance
-        .collection('categories')
-        // .doc(name)
-        // .collection(name)
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList());
-    log(snap.toString());
-    return snap;
-  }
-
-  callCollectison() async {
-    final reff = FirebaseFirestore.instance.collection('categories').doc();
-    final names = await reff.get();
   }
 }

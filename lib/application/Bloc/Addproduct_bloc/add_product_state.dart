@@ -6,7 +6,7 @@ class AddProductState {
   String description;
 
   double price;
-  double quantity;
+  String quantity;
 
   List images;
   String categoryName;
@@ -30,7 +30,7 @@ class InitialState extends AddProductState {
             title: '',
             description: '',
             price: 0,
-            quantity: 0,
+            quantity: '',
             images: [],
             Size: '');
 }

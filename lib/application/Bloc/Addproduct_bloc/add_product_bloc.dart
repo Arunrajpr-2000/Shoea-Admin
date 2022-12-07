@@ -56,14 +56,5 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
       );
       emit(state);
     });
-    // on<Sizes>((event, emit) {
-    //   emit(AddProductState(
-    //       title: state.title,
-    //       description: state.description,
-    //       price: state.price,
-    //       quantity: state.quantity,
-    //       images: state.images,
-    //       Size: event.Size));
-    // });
   }
 }
