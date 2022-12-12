@@ -21,11 +21,11 @@ class SaveToDB extends AddProductEvent {
     required this.docName,
   });
   final String categoryName;
-  final String Size;
+  final List Size;
   final String docName;
   final String name_controller;
   final String description_controller;
 
-  final String price_controller;
-  final String quantity_controller;
+  final double price_controller;
+  final int quantity_controller;
 }

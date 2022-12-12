@@ -22,7 +22,7 @@ class ProductView extends StatelessWidget {
   final List? productimage;
 
   final String? productdescription;
-  final String? productsize;
+  final List? productsize;
   final String? productquantiy;
 
   @override
@@ -59,7 +59,7 @@ class ProductView extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  'SIZE : ${productsize.toString()}',
+                  'SIZE : ${productsize}',
                   style: TextStyle(
                       color: Whitecolor,
                       fontSize: 18,

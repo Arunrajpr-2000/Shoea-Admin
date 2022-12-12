@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shoea_admin/model/product_model.dart';
 
 Future addProduct({
-  required String size,
+  required List size,
   required String name,
   required String docName,
   required String description,
-  String price = '1',
-  String quantity = '1',
+  required double price,
+  required int quantity,
   required String categoryName,
   required List images,
 }) async {
@@ -23,8 +23,8 @@ Future addProduct({
     size: size,
     name: name,
     description: description,
-    price: double.parse(price),
-    quantity: double.parse(quantity),
+    price: price,
+    quantity: quantity,
     images: images,
   );
   final json = product.toJson();
@@ -44,57 +44,40 @@ Future addProduct({
   log('added');
 }
 
-//
+// edit product.....................
 
 updateProduct({
-  required Product product,
-  required final context,
-  required String size,
+  required List size,
   required String name,
   required String description,
   required String categoryName,
   required String docName,
   required String price,
-  String quantity = '0',
+  required String quantity,
   required List images,
 }) async {
   log(name);
+  log(size[0].toString());
+
+  log(description);
+  log(categoryName);
+  log(docName);
+  log(price);
+  log(quantity);
+
   final docProduct = FirebaseFirestore.instance
       .collection('categories')
       .doc(categoryName)
       .collection(categoryName)
-      .doc(product.docName);
-  // await UpdateProductFunctions.updateProduct(
-  //   name: event.name_controller.trim().isEmpty
-  //       ? state.product.name
-  //       : event.name_controller,
-  //   description: event.description_controller.trim().isEmpty
-  //       ? state.product.description
-  //       : event.description_controller,
-  //   spec: event.spec_controller.trim() == ''
-  //       ? state.product.spec
-  //       : event.spec_controller,
-  //   price: event.price_controller.trim() == ''
-  //       ? '${state.product.price}'
-  //       : event.price_controller,
-  //   quantity: event.quantity_controller.trim() == ''
-  //       ? '${state.product.quantity}'
-  //       : event.quantity_controller,
-  //   rating: event.rating_controller.trim() == ''
-  //       ? '${state.product.rating}'
-  //       : event.rating_controller,
-  //   colors: state.product.colors,
-  //   images: state.product.images,
-  //   id: event.id,
-  //   context: event.context,
-  // );
+      .doc(docName);
+
   final Product updatedProduct = Product(
     size: size,
     docName: docName,
     name: name,
     description: description,
-    price: price == '0' ? product.price : double.parse(price),
-    quantity: quantity == '0' ? product.quantity : double.parse(quantity),
+    price: double.parse(price),
+    quantity: int.parse(quantity),
     images: images,
   );
   // log('Updating.... ${product.id}');
@@ -104,41 +87,7 @@ updateProduct({
       .collection('categories')
       .doc(categoryName)
       .collection(categoryName)
-      .doc(product.docName);
-  await docProduct.set(json);
-  await allproducts.set(json);
-
-  // productUpdatedAlert(context, updatedProduct.name);
-  // log('Updated ${product.name}');
+      .doc(docName);
+  //await docProduct.set(json);
+  await allproducts.update(json);
 }
-
-  // static productUpdatedAlert(BuildContext context, String name) {
-  //   // set up the button
-  //   Widget okButton = TextButton(
-  //     child: Text("OK"),
-  //     onPressed: () {
-  //       Navigator.pop(context);
-  //       Navigator.pop(context);
-  //     },
-  //   );
-
-  //   // set up the AlertDialog
-  //   AlertDialog alert = AlertDialog(
-  //     backgroundColor: Colors.white,
-  //     content: Text(
-  //       "$name updated.",
-  //       style: TextStyle(fontSize: 20),
-  //     ),
-  //     actions: [
-  //       okButton,
-  //     ],
-  //   );
-
-  //   // show the dialog
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }

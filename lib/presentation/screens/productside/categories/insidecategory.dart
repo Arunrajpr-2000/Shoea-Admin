@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shoea_admin/model/product_model.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/add_product_screen.dart';
 import 'package:shoea_admin/presentation/screens/productside/edit_product/edit_product.dart';
 import 'package:shoea_admin/presentation/screens/productside/product_details/product_View.dart';
@@ -9,6 +10,7 @@ class InSideCategory extends StatelessWidget {
   InSideCategory({required this.brandName, super.key});
 
   String brandName;
+  // Product? product;
 
   final List<String>? Cartimage = [
     'https://rukminim1.flixcart.com/image/832/832/l58iaa80/shoe/9/y/q/-original-imagfyaseenuzn6d.jpeg?q=70',
@@ -62,7 +64,7 @@ class InSideCategory extends StatelessWidget {
                       snapshot.data!.docs[index];
                   String id = snapshot.data!.docs[index].id;
                   log("ID $id");
-                  if (id != documentSnapshot['name']) {
+                  if (id != documentSnapshot['docname']) {
                     DocumentReference documentReference = FirebaseFirestore
                         .instance
                         .collection("categories")
@@ -85,7 +87,7 @@ class InSideCategory extends StatelessWidget {
                           productprice: documentSnapshot['price'].toString(),
                           productquantiy:
                               documentSnapshot['quantity'].toString(),
-                          productsize: documentSnapshot['size'].toString(),
+                          productsize: documentSnapshot['size'].toList(),
                           productimage: documentSnapshot['image'],
                         ),
                       )),
@@ -119,8 +121,8 @@ class InSideCategory extends StatelessWidget {
                               onPressed: () =>
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => EditProducts(
-                                            brandname: documentSnapshot['name']
-                                                .toString(),
+                                            // product: product,
+                                            brandname: brandName,
                                             productname:
                                                 documentSnapshot['name']
                                                     .toString(),
@@ -133,8 +135,8 @@ class InSideCategory extends StatelessWidget {
                                                 documentSnapshot['quantity']
                                                     .toString(),
                                             productsize:
-                                                documentSnapshot['size']
-                                                    .toString(),
+                                                documentSnapshot['size'],
+
                                             productindeximage:
                                                 documentSnapshot['image']
                                                     .toList(),

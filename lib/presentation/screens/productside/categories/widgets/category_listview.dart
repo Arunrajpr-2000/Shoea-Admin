@@ -4,15 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shoea_admin/core/constants.dart';
+import 'package:shoea_admin/model/product_model.dart';
 import 'package:shoea_admin/presentation/screens/productside/categories/insidecategory.dart';
 
 class CategoryListView extends StatelessWidget {
-  const CategoryListView(
-      {Key? key, required this.categoryName, required this.snapshot})
-      : super(key: key);
+  CategoryListView({
+    Key? key,
+    required this.categoryName,
+    required this.snapshot,
+  }) : super(key: key);
 
   final String? categoryName;
   final dynamic snapshot;
+  // Product product;
 
   @override
   Widget build(BuildContext context) {

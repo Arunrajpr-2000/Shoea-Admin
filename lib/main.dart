@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoea_admin/application/Bloc/EditProduct_bloc/edit_bloc_bloc.dart';
 import 'package:shoea_admin/presentation/screens/Home/Home.dart';
 // import 'package:shoea_admin/presentation/screens/productside/categories/categorylist.dart';
 // import 'package:shoea_admin/presentation/screens/user%20Side/user.dart';
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => AddProductBloc(),
-          )
+          ),
+          BlocProvider(create: (ctx) => EditBlocBloc()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,

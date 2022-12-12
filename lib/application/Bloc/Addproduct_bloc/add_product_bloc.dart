@@ -47,9 +47,8 @@ class AddProductBloc extends Bloc<AddProductEvent, AddProductState> {
         categoryName: event.categoryName,
         name: event.name_controller,
         description: event.description_controller,
-        price: event.price_controller.isEmpty ? '0' : event.price_controller,
-        quantity:
-            event.quantity_controller.isEmpty ? '0' : event.quantity_controller,
+        price: event.price_controller,
+        quantity: event.quantity_controller,
         images: state.images,
         size: event.Size,
         docName: event.docName,

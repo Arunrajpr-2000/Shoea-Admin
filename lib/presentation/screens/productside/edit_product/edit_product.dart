@@ -1,20 +1,25 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multiselect/multiselect.dart';
+import 'package:shoea_admin/application/Bloc/EditProduct_bloc/edit_bloc_bloc.dart';
 import 'package:shoea_admin/core/constants.dart';
+import 'package:shoea_admin/function/add_product_function.dart';
+import 'package:shoea_admin/model/product_model.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/add_images_widget.dart';
 import 'package:shoea_admin/presentation/screens/productside/edit_product/widget/edit_image_widget.dart';
 
 import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
+import '../add_product/widgets/textfield_widget.dart';
 
 class EditProducts extends StatelessWidget {
-  String? productname,
-      productprice,
-      productquantity,
-      productdescription,
-      productsize;
+  String? productname, productprice, productquantity, productdescription;
+
+  List productsize;
 
   EditProducts({
     super.key,
@@ -33,6 +38,7 @@ class EditProducts extends StatelessWidget {
   //     productindexdescription,
   //     productindexsize;
   final List? productindeximage;
+  // Product? product;
 
   late final name_controller = TextEditingController(text: productname);
   // String? Size;
@@ -42,8 +48,11 @@ class EditProducts extends StatelessWidget {
 
   late final quantity_controller = TextEditingController(text: productquantity);
 
+  List<String> productnewsizes = [];
+
   @override
   Widget build(BuildContext context) {
+    // BlocProvider.of<EditBlocBloc>(context).add(LoadOldData(product: product!));
     final screenWidth = MediaQuery.of(context).size.width * 0.95;
 
     return Scaffold(
@@ -61,8 +70,12 @@ class EditProducts extends StatelessWidget {
           const SizedBox(
             height: 40,
           ),
+
+          // TextfieldWidget()
+
           TextFormField(
             controller: name_controller,
+            // initialValue: productname,
             style: const TextStyle(
               color: Colors.white,
             ),
@@ -79,9 +92,6 @@ class EditProducts extends StatelessWidget {
                 ),
                 // hintText: 'Name Of the Product',
                 hintStyle: TextStyle(color: Colors.white70)),
-            onChanged: (String name) {
-              productname = name;
-            },
           ),
 
           // textfield(
@@ -99,6 +109,7 @@ class EditProducts extends StatelessWidget {
                 width: 150,
                 child: TextFormField(
                   controller: price_controller,
+                  // initialValue: productprice,
                   keyboardType: TextInputType.number,
                   style: const TextStyle(
                     color: Colors.white,
@@ -116,15 +127,16 @@ class EditProducts extends StatelessWidget {
                       ),
                       // hintText: 'Name Of the Product',
                       hintStyle: TextStyle(color: Colors.white70)),
-                  onChanged: (String name) {
-                    productprice = name;
-                  },
+                  // onChanged: (String name) {
+                  //   productprice = name;
+                  // },
                 ),
               ),
               SizedBox(
                 width: 150,
                 child: TextFormField(
                   controller: quantity_controller,
+                  //initialValue: productquantity,
                   keyboardType: TextInputType.number,
                   style: const TextStyle(
                     color: Colors.white,
@@ -142,9 +154,9 @@ class EditProducts extends StatelessWidget {
                       ),
                       // hintText: 'Name Of the Product',
                       hintStyle: TextStyle(color: Colors.white70)),
-                  onChanged: (String name) {
-                    productquantity = name;
-                  },
+                  // onChanged: (String name) {
+                  //   productquantity = name;
+                  // },
                 ),
               ),
             ],
@@ -156,7 +168,7 @@ class EditProducts extends StatelessWidget {
             width: 200,
             height: 100,
             child: TextFormField(
-              // initialValue: ,
+              //initialValue: description_controller.text,
               controller: description_controller,
               maxLines: 5,
               style: const TextStyle(
@@ -175,54 +187,79 @@ class EditProducts extends StatelessWidget {
                   ),
                   // hintText: 'Name Of the Product',
                   hintStyle: TextStyle(color: Colors.white70)),
-              onChanged: (String name) {
-                productdescription = name;
-              },
+              // onChanged: (String name) {
+              //   productdescription = name;
+              // },
             ),
           ),
           const SizedBox(
             height: 20,
           ),
 
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: BlocBuilder<AddProductBloc, AddProductState>(
-              builder: (context, state) {
-                return DropdownButton<String>(
-                  focusColor: Colors.red,
-                  iconEnabledColor: Colors.red,
-                  dropdownColor: Whitecolor,
-                  items: <String>[
-                    '38',
-                    '40',
-                    '42',
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    productsize = value;
-
-                    // BlocProvider.of<AddProductBloc>(context)
-                    //     .add(Sizes(Size: Size ?? 'size'));
-                  },
-                  hint: const Text(
-                    'Size',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              },
-            ),
+          BlocBuilder<EditBlocBloc, EditBlocState>(
+            builder: (context, state) {
+              return StatefulBuilder(
+                builder: (BuildContext context, setState) {
+                  return Container(
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: DropDownMultiSelect(
+                      onChanged: (x) {
+                        setState(() {
+                          productsize = x;
+                        });
+                      },
+                      options: [
+                        '36',
+                        '38',
+                        '40',
+                        '42',
+                      ],
+                      selectedValues: productsize.cast(),
+                      whenEmpty: 'Select Size',
+                    ),
+                  );
+                },
+              );
+            },
           ),
+
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 20, right: 20),
+          //   child: BlocBuilder<EditBlocBloc, EditBlocEvent>(
+          //     builder: (context, state) {
+          //       return DropdownButton<String>(
+          //         focusColor: Colors.red,
+          //         iconEnabledColor: Colors.red,
+          //         dropdownColor: Whitecolor,
+          //         items: <String>[
+          //           '38',
+          //           '40',
+          //           '42',
+          //         ].map((String value) {
+          //           return DropdownMenuItem<String>(
+          //             value: value,
+          //             child: Text(
+          //               value,
+          //             ),
+          //           );
+          //         }).toList(),
+          //         onChanged: (value) {
+          //           productsize = value;
+
+          //           // BlocProvider.of<AddProductBloc>(context)
+          //           //     .add(Sizes(Size: Size ?? 'size'));
+          //         },
+          //         hint: const Text(
+          //           'Size',
+          //           style: TextStyle(color: Colors.white),
+          //         ),
+          //       );
+          //     },
+          //   ),
+          // ),
           const SizedBox(
             height: 20,
           ),
-
-          //AddImagesWidget(),
 
           k20Height,
 
@@ -233,6 +270,10 @@ class EditProducts extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // BlocBuilder<EditBlocBloc, EditBlocState>(
+              //   builder: (context, state) {
+              //     return
+
               ElevatedButton(
                 onPressed: () {
                   log('message$brandname');
@@ -240,21 +281,21 @@ class EditProducts extends StatelessWidget {
                       .instance
                       .collection("categories")
                       .doc(brandname)
-                      .collection(productname.toString())
+                      .collection(brandname)
                       .doc(productname);
 
                   // var productsize;
                   Map<String, dynamic> category = {
-                    "name": productname,
-                    'docname': productname,
-                    'price': productprice,
-                    'quantity': productquantity,
-                    'description': productdescription,
+                    "name": name_controller.text,
+                    'docname': name_controller.text,
+                    'price': price_controller.text,
+                    'quantity': quantity_controller.text,
+                    'description': description_controller.text,
                     'size': productsize,
                     'image': productindeximage
                   };
-                  log(productname.toString());
-                  log(productprice.toString());
+                  log(name_controller.text);
+                  log(price_controller.text);
 
                   log(productquantity.toString());
 
@@ -263,11 +304,30 @@ class EditProducts extends StatelessWidget {
                   log(productsize.toString());
 
                   log(productindeximage.toString());
-                  log('message cate $category');
+                  log('message cate ');
 
                   documentReference
-                      .set(category)
-                      .whenComplete(() => log('$productname Created'));
+                      .update(category)
+                      .whenComplete(() => log(' Created'));
+
+                  // updateProduct(
+                  //   name: name_controller.text.trim().isEmpty
+                  //       ? productname.toString()
+                  //       : name_controller.text.trim(),
+                  //   description: description_controller.text.trim().isEmpty
+                  //       ? productdescription.toString()
+                  //       : description_controller.text.trim(),
+                  //   price: price_controller.text.trim().isEmpty
+                  //       ? productprice.toString()
+                  //       : price_controller.text.trim(),
+                  //   quantity: quantity_controller.text.trim().isEmpty
+                  //       ? productquantity.toString()
+                  //       : quantity_controller.text.trim(),
+                  //   docName: state.product.docName.toString(),
+                  //   size: state.product.size,
+                  //   images: state.product.images,
+                  //   categoryName: state.product.name,
+                  // );
 
                   Navigator.of(context).pop();
                 },
@@ -279,6 +339,8 @@ class EditProducts extends StatelessWidget {
                   //backgroundColor: Colors.green
                 ),
                 child: const Text('  Edit  '),
+                //   );
+                // },
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multiselect/multiselect.dart';
 import 'package:shoea_admin/core/constants.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/add_images_widget.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/textfield_widget.dart';
@@ -15,7 +16,6 @@ class AddProducts extends StatelessWidget {
       productprice,
       productquantity,
       productdescription,
-      productsize,
       productimage;
 
   AddProducts({super.key, required this.brandName});
@@ -26,6 +26,8 @@ class AddProducts extends StatelessWidget {
   TextEditingController description_controller = TextEditingController();
 
   TextEditingController quantity_controller = TextEditingController();
+
+  List<String> Productsize = [];
 
   @override
   Widget build(BuildContext context) {
@@ -66,30 +68,53 @@ class AddProducts extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: BlocBuilder<AddProductBloc, AddProductState>(
               builder: (context, state) {
-                return DropdownButton<String>(
-                  focusColor: Colors.red,
-                  iconEnabledColor: Colors.red,
-                  dropdownColor: Whitecolor,
-                  items: <String>[
-                    '38',
-                    '40',
-                    '42',
-                  ].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
+                return StatefulBuilder(
+                  builder: (BuildContext context, setState) {
+                    return Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: DropDownMultiSelect(
+                        onChanged: (List<String> x) {
+                          setState(() {
+                            Productsize = x;
+                          });
+                        },
+                        options: [
+                          '36',
+                          '38',
+                          '40',
+                          '42',
+                        ],
+                        selectedValues: Productsize,
+                        whenEmpty: 'Select Size',
                       ),
                     );
-                  }).toList(),
-                  onChanged: (value) {
-                    productsize = value;
                   },
-                  hint: const Text(
-                    'Size',
-                    style: TextStyle(color: Colors.white),
-                  ),
                 );
+
+                //  DropdownButton<String>(
+                //   focusColor: Colors.red,
+                //   iconEnabledColor: Colors.red,
+                //   dropdownColor: Whitecolor,
+                //   items: <String>[
+                //     '38',
+                //     '40',
+                //     '42',
+                //   ].map((String value) {
+                //     return DropdownMenuItem<String>(
+                //       value: value,
+                //       child: Text(
+                //         value,
+                //       ),
+                //     );
+                //   }).toList(),
+                //   onChanged: (value) {
+                //     productsize = value;
+                //   },
+                //   hint: const Text(
+                //     'Size',
+                //     style: TextStyle(color: Colors.white),
+                //   ),
+                // );
               },
             ),
           ),
@@ -124,9 +149,9 @@ class AddProducts extends StatelessWidget {
                       categoryName: brandName.toString(),
                       name_controller: name_controller.text,
                       description_controller: description_controller.text,
-                      price_controller: price_controller.text,
-                      quantity_controller: quantity_controller.text,
-                      Size: productsize.toString(),
+                      price_controller: double.parse(price_controller.text),
+                      quantity_controller: int.parse(quantity_controller.text),
+                      Size: Productsize.toList(),
                       docName: name_controller.text));
 
                   Navigator.of(context).pop();

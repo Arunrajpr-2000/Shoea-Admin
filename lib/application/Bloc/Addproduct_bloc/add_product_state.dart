@@ -6,11 +6,11 @@ class AddProductState {
   String description;
 
   double price;
-  String quantity;
+  int quantity;
 
   List images;
   String categoryName;
-  String Size;
+  List Size;
 
   AddProductState({
     required this.title,
@@ -30,7 +30,7 @@ class InitialState extends AddProductState {
             title: '',
             description: '',
             price: 0,
-            quantity: '',
+            quantity: 0,
             images: [],
-            Size: '');
+            Size: []);
 }

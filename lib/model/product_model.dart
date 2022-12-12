@@ -2,10 +2,10 @@ class Product {
   final String name;
   final String description;
   final double price;
-  final String? size;
-  final String? docName;
+  final List size;
+  final String docName;
 
-  final double quantity;
+  final int quantity;
   final List images;
   Product({
     required this.size,
