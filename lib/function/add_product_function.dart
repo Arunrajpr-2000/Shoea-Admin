@@ -39,7 +39,13 @@ Future addProduct({
       .collection(categoryName)
       .doc(product.docName);
   // await docProduct.set(json);
-  await allProduc.set(json);
+  await allProduc.set(json).whenComplete(
+    () async {
+      final allcategory =
+          FirebaseFirestore.instance.collection('all').doc(product.docName);
+      await allcategory.set(json);
+    },
+  );
 
   log('added');
 }
@@ -61,15 +67,15 @@ updateProduct({
 
   log(description);
   log(categoryName);
-  log(docName);
+  // log(docName);
   log(price);
   log(quantity);
 
-  final docProduct = FirebaseFirestore.instance
-      .collection('categories')
-      .doc(categoryName)
-      .collection(categoryName)
-      .doc(docName);
+  // final docProduct = FirebaseFirestore.instance
+  //     .collection('categories')
+  //     .doc(categoryName)
+  //     .collection(categoryName)
+  //     .doc(docName);
 
   final Product updatedProduct = Product(
     size: size,
@@ -89,5 +95,9 @@ updateProduct({
       .collection(categoryName)
       .doc(docName);
   //await docProduct.set(json);
-  await allproducts.update(json);
+  await allproducts.update(json).whenComplete(() async {
+    final allcategory =
+        FirebaseFirestore.instance.collection('all').doc(docName);
+    await allcategory.update(json);
+  });
 }

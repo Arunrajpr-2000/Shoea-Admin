@@ -1,6 +1,6 @@
-import 'dart:developer';
+// import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:multiselect/multiselect.dart';
@@ -8,7 +8,6 @@ import 'package:shoea_admin/core/constants.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/add_images_widget.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/textfield_widget.dart';
 
-import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
 import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
 
 class AddProducts extends StatelessWidget {
@@ -20,6 +19,7 @@ class AddProducts extends StatelessWidget {
 
   AddProducts({super.key, required this.brandName});
   final String? brandName;
+  // ignore: non_constant_identifier_names
   TextEditingController name_controller = TextEditingController();
   // String? Size;
   TextEditingController price_controller = TextEditingController();
@@ -71,14 +71,14 @@ class AddProducts extends StatelessWidget {
                 return StatefulBuilder(
                   builder: (BuildContext context, setState) {
                     return Container(
-                      decoration: BoxDecoration(color: Colors.white),
+                      decoration: const BoxDecoration(color: Colors.white),
                       child: DropDownMultiSelect(
                         onChanged: (List<String> x) {
                           setState(() {
                             Productsize = x;
                           });
                         },
-                        options: [
+                        options: const [
                           '36',
                           '38',
                           '40',

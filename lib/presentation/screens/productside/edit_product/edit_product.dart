@@ -9,15 +9,14 @@ import 'package:multiselect/multiselect.dart';
 import 'package:shoea_admin/application/Bloc/EditProduct_bloc/edit_bloc_bloc.dart';
 import 'package:shoea_admin/core/constants.dart';
 import 'package:shoea_admin/function/add_product_function.dart';
-import 'package:shoea_admin/model/product_model.dart';
-import 'package:shoea_admin/presentation/screens/productside/add_product/widgets/add_images_widget.dart';
 import 'package:shoea_admin/presentation/screens/productside/edit_product/widget/edit_image_widget.dart';
 
-import '../../../../application/Bloc/Addproduct_bloc/add_product_bloc.dart';
-import '../add_product/widgets/textfield_widget.dart';
-
 class EditProducts extends StatelessWidget {
-  String? productname, productprice, productquantity, productdescription;
+  String? productname,
+      productprice,
+      productquantity,
+      productdescription,
+      docname;
 
   List productsize;
 
@@ -29,6 +28,7 @@ class EditProducts extends StatelessWidget {
     required this.productname,
     required this.productprice,
     required this.productquantity,
+    required this.docname,
     required this.productsize,
   });
   String brandname;
@@ -275,59 +275,63 @@ class EditProducts extends StatelessWidget {
               //     return
 
               ElevatedButton(
-                onPressed: () {
-                  log('message$brandname');
-                  DocumentReference documentReference = FirebaseFirestore
-                      .instance
-                      .collection("categories")
-                      .doc(brandname)
-                      .collection(brandname)
-                      .doc(productname);
+                onPressed: () async {
+                  // log('message$brandname');
+                  // DocumentReference documentReference = FirebaseFirestore
+                  //     .instance
+                  //     .collection("categories")
+                  //     .doc(brandname)
+                  //     .collection(brandname)
+                  //     .doc(productname);
 
-                  // var productsize;
-                  Map<String, dynamic> category = {
-                    "name": name_controller.text,
-                    'docname': name_controller.text,
-                    'price': price_controller.text,
-                    'quantity': quantity_controller.text,
-                    'description': description_controller.text,
-                    'size': productsize,
-                    'image': productindeximage
-                  };
-                  log(name_controller.text);
-                  log(price_controller.text);
+                  // DocumentReference allprodEdit = FirebaseFirestore.instance
+                  //     .collection("all")
+                  //     .doc(productname);
 
-                  log(productquantity.toString());
+                  // // var productsize;
+                  // Map<String, dynamic> category = {
+                  //   "name": name_controller.text,
+                  //   'docname': name_controller.text,
+                  //   'price': double.parse(price_controller.text),
+                  //   'quantity': int.parse(price_controller.text),
+                  //   'description': description_controller.text,
+                  //   'size': productsize,
+                  //   'image': productindeximage
+                  // };
+                  // log(name_controller.text);
+                  // log(price_controller.text);
 
-                  log(productdescription.toString());
+                  // log(productquantity.toString());
 
-                  log(productsize.toString());
+                  // log(productdescription.toString());
 
-                  log(productindeximage.toString());
-                  log('message cate ');
+                  // log(productsize.toString());
 
-                  documentReference
-                      .update(category)
-                      .whenComplete(() => log(' Created'));
+                  // log(productindeximage.toString());
+                  // log('message cate ');
 
-                  // updateProduct(
-                  //   name: name_controller.text.trim().isEmpty
-                  //       ? productname.toString()
-                  //       : name_controller.text.trim(),
-                  //   description: description_controller.text.trim().isEmpty
-                  //       ? productdescription.toString()
-                  //       : description_controller.text.trim(),
-                  //   price: price_controller.text.trim().isEmpty
-                  //       ? productprice.toString()
-                  //       : price_controller.text.trim(),
-                  //   quantity: quantity_controller.text.trim().isEmpty
-                  //       ? productquantity.toString()
-                  //       : quantity_controller.text.trim(),
-                  //   docName: state.product.docName.toString(),
-                  //   size: state.product.size,
-                  //   images: state.product.images,
-                  //   categoryName: state.product.name,
-                  // );
+                  // await documentReference.update(category).whenComplete(() {
+                  //   allprodEdit.update(category);
+                  // });
+
+                  updateProduct(
+                    name: name_controller.text.trim().isEmpty
+                        ? productname.toString()
+                        : name_controller.text.trim(),
+                    description: description_controller.text.trim().isEmpty
+                        ? productdescription.toString()
+                        : description_controller.text.trim(),
+                    price: price_controller.text.trim().isEmpty
+                        ? productprice.toString()
+                        : price_controller.text.trim(),
+                    quantity: quantity_controller.text.trim().isEmpty
+                        ? productquantity.toString()
+                        : quantity_controller.text.trim(),
+                    docName: docname.toString(),
+                    size: productsize,
+                    images: productindeximage!,
+                    categoryName: brandname,
+                  );
 
                   Navigator.of(context).pop();
                 },

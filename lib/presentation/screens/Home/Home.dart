@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoea_admin/presentation/screens/Orders/orders.dart';
+import 'package:shoea_admin/presentation/screens/allProduct/all_product.dart';
 import 'package:shoea_admin/presentation/screens/productside/categories/categorylist.dart';
 import 'package:shoea_admin/presentation/screens/user%20Side/user.dart';
 
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.black,
-          title: Text('Shoea Admin'),
+          title: const Text('Shoea Admin'),
           centerTitle: true,
           // leading: IconButton(
           //     onPressed: () {
@@ -25,6 +25,7 @@ class HomeScreen extends StatelessWidget {
         ),
         body: SafeArea(
           child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -74,7 +75,7 @@ class HomeScreen extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => OrderScreen())),
+                    MaterialPageRoute(builder: (context) => Allproduct())),
                 child: Container(
                     height: 200,
                     margin: EdgeInsets.all(30),
@@ -93,8 +94,8 @@ class HomeScreen extends StatelessWidget {
                               fontFamily: "Font1",
                               color: Colors.white,
                             ),
-                            'Orders'))),
-              )
+                            'All Product'))),
+              ),
             ],
           ),
         ));

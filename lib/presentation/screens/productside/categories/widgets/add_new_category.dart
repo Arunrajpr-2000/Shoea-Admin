@@ -94,7 +94,7 @@ Future<dynamic> AddNewCategory(BuildContext context, controller, categoryName) {
                                 'desciption': 'Description of product',
                                 'size': 'size of product',
                                 "image": [
-                                  'https://rukminim1.flixcart.com/image/832/832/kyt0ya80/shoe/p/g/1/10-bbmh9023-bacca-bucci-grey-original-imagayu2837tmzjq.jpeg?q=70',
+                                  '',
                                 ],
                                 "price": 'Price of product',
                                 "quantity": 'Quantity of product',

@@ -43,12 +43,12 @@ class ImageFunctions {
 
     final ref = FirebaseStorage.instance.ref().child(path);
     final uploadTask = ref.putFile(file);
-    log('uploadTask: ${uploadTask}');
+    // log('uploadTask: ${uploadTask}');
     log('image ${xfile.name} uploaded to fire storage');
     final snapshot = await uploadTask.whenComplete(() {});
-    log('snapshot : ${snapshot}');
+    // log('snapshot : ${snapshot}');
     final imageUrl = await snapshot.ref.getDownloadURL();
-    log('ImageUrl : ${imageUrl}');
+    log('ImageUrl : $imageUrl');
     return imageUrl;
   }
 }

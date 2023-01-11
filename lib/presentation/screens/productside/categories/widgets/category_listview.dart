@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shoea_admin/core/constants.dart';
-import 'package:shoea_admin/model/product_model.dart';
+// import 'package:shoea_admin/model/product_model.dart';
 import 'package:shoea_admin/presentation/screens/productside/categories/insidecategory.dart';
 
 class CategoryListView extends StatelessWidget {
@@ -25,8 +25,8 @@ class CategoryListView extends StatelessWidget {
       itemCount: snapshot.data!.docs.length,
       itemBuilder: (context, index) {
         QueryDocumentSnapshot documentSnapshot = snapshot.data!.docs[index];
-        String id = snapshot.data!.docs[index].id;
-        log(id);
+        // String id = snapshot.data!.docs[index].id;
+        // log(id);
 
         return Padding(
           padding: const EdgeInsets.all(8.0),

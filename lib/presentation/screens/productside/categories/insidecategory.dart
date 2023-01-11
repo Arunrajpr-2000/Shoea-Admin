@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shoea_admin/model/product_model.dart';
 import 'package:shoea_admin/presentation/screens/productside/add_product/add_product_screen.dart';
 import 'package:shoea_admin/presentation/screens/productside/edit_product/edit_product.dart';
 import 'package:shoea_admin/presentation/screens/productside/product_details/product_View.dart';
@@ -12,11 +11,11 @@ class InSideCategory extends StatelessWidget {
   String brandName;
   // Product? product;
 
-  final List<String>? Cartimage = [
-    'https://rukminim1.flixcart.com/image/832/832/l58iaa80/shoe/9/y/q/-original-imagfyaseenuzn6d.jpeg?q=70',
-    'https://rukminim1.flixcart.com/image/832/832/xif0q/shoe/u/s/3/-original-imaggcyckpkgqvfp.jpeg?q=70',
-    'https://rukminim1.flixcart.com/image/832/832/xif0q/shoe/4/j/1/6-nikefecion-6-nnikhe-blue-original-imaggxz9wf5s7q3d.jpeg?q=70',
-  ];
+  // final List<String>? Cartimage = [
+  //   'https://rukminim1.flixcart.com/image/832/832/l58iaa80/shoe/9/y/q/-original-imagfyaseenuzn6d.jpeg?q=70',
+  //   'https://rukminim1.flixcart.com/image/832/832/xif0q/shoe/u/s/3/-original-imaggcyckpkgqvfp.jpeg?q=70',
+  //   'https://rukminim1.flixcart.com/image/832/832/xif0q/shoe/4/j/1/6-nikefecion-6-nnikhe-blue-original-imaggxz9wf5s7q3d.jpeg?q=70',
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +98,10 @@ class InSideCategory extends StatelessWidget {
 
                         // radius: 40,
                         // backgroundImage: NetworkImage(''),
-                        child: documentSnapshot['image'] == null
-                            ? Image.network(Cartimage![0])
-                            : Image.network(
-                                documentSnapshot['image'][0],
-                                fit: BoxFit.cover,
-                              ),
+                        child: Image.network(
+                          documentSnapshot['image'][0],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       title: Text(
                         documentSnapshot['name'],
@@ -121,6 +118,8 @@ class InSideCategory extends StatelessWidget {
                               onPressed: () =>
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => EditProducts(
+                                            docname:
+                                                documentSnapshot['docname'],
                                             // product: product,
                                             brandname: brandName,
                                             productname:
