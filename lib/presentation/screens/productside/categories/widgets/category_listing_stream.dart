@@ -22,9 +22,9 @@ class CategoryListStream extends StatelessWidget {
             );
           } else {
             return const Align(
-              alignment: FractionalOffset.bottomCenter,
+              alignment: FractionalOffset.center,
               child: CircularProgressIndicator(
-                color: Colors.red,
+                color: Colors.white,
               ),
             );
           }
